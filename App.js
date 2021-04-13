@@ -1,34 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import CountryList from './components/CountryList'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import OverViewPage from './components/OverviewPage';
+import {StatusBar} from 'react-native';
+
+
+const Tab = createMaterialTopTabNavigator();
+
+StatusBar.setBarStyle('light-content', true);
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        tabBarOptions={{
+          tabStyle: { height: 100 },
+          style: { backgroundColor: '#202124' },
+          labelStyle: {color: '#fffaf0'},
+          indicatorStyle: {backgroundColor: '#00ce7c', height: 3},
+          showIcon: true,
+        }}
+      >
+        <Tab.Screen name="Overview" component={OverViewPage} />
+        <Tab.Screen name="Countries" component={CountryList} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#202124',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#00ce7c',
-  },
-});
-
-const fetchCountries = async () => {
-  try {
-    let response = await fetch("https://coronavirus-19-api.herokuapp.com/countries");
-    let json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error);
-  }
-};
