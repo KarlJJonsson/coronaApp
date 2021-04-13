@@ -21,5 +21,14 @@ const styles = StyleSheet.create({
   text: {
     color: '#00ce7c',
   },
-  
 });
+
+const fetchCountries = async () => {
+  try {
+    let response = await fetch("https://coronavirus-19-api.herokuapp.com/countries");
+    let json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+};
