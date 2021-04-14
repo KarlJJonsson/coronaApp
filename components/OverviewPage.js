@@ -1,13 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-class OverViewPage extends React.Component{
-  render (){
+import TotalCard from "./TotalCard";
+import DailyCard from "./DailyCard";
+import Separator from "./Separator";
+
+class OverViewPage extends React.Component {
+  render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Overview here</Text>
-        <StatusBar style="auto" />
+        <TotalCard />
+        <Separator />
+        <DailyCard cases="3000" deaths="200" />
+        <Separator />
       </View>
     );
   }
@@ -16,12 +21,8 @@ class OverViewPage extends React.Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#202124',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#00ce7c',
+    backgroundColor: "#202124",
+    alignItems: "flex-start",
   },
 });
 
