@@ -8,19 +8,29 @@ const TotalCard = (props) => {
   return (
     <View style={styles.card}>
       <View>
-        <Text style={styles.headerText}>{gf.numberWithCommas(130000000)}</Text>
+        <Text style={styles.headerText}>
+          {gf.numberWithCommas(props.country.cases)}
+        </Text>
         <Text style={{ color: "white" }}>Total cases</Text>
       </View>
       <View style={styles.chartSection}>
         <Text style={styles.defaultText}>CIRCULAR CHART</Text>
         <View>
-          <StatItem backgroundColor="#FFA726" text="Active" amount="300000" />
+          <StatItem
+            backgroundColor="#FFA726"
+            text="Active"
+            amount={props.country.active}
+          />
           <StatItem
             backgroundColor="#66BB6A"
             text="Recovered"
-            amount="2500000"
+            amount={props.country.recovered}
           />
-          <StatItem backgroundColor="#EF5350" text="Deaths" amount="30041241" />
+          <StatItem
+            backgroundColor="#EF5350"
+            text="Deaths"
+            amount={props.country.deaths}
+          />
         </View>
       </View>
     </View>

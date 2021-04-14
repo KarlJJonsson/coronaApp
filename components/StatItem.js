@@ -4,7 +4,6 @@ import { View, StyleSheet, Text } from "react-native";
 import * as gf from "../GlobalFunctions";
 
 const StatItem = (props) => {
-  console.log(props.text);
   return (
     <View style={styles.row}>
       <View
