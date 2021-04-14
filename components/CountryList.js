@@ -47,9 +47,8 @@ class CountryList extends React.Component{
       <View
         style={{
           height: 1,
-          width: '86%',
-          backgroundColor: '#CED0CE',
-          marginLeft: '5%'
+          width: '100%',
+          backgroundColor: '#404040',
         }}
       />
     )
