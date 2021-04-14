@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import TotalCard from "./TotalCard";
 import DailyCard from "./DailyCard";
@@ -7,11 +7,12 @@ import Separator from "./Separator";
 
 class OverViewPage extends React.Component {
   render() {
+    const world = data2[0];
     return (
       <View style={styles.container}>
-        <TotalCard />
+        <TotalCard country={world} />
         <Separator />
-        <DailyCard cases="3000" deaths="200" />
+        <DailyCard country={world} />
         <Separator />
       </View>
     );

@@ -8,10 +8,10 @@ const DailyCard = (props) => {
     <View style={styles.card}>
       <Text style={styles.headerText}>Today</Text>
       <Text style={styles.casesText}>
-        + {gf.numberWithCommas(props.cases)} cases
+        + {gf.numberWithCommas(props.country.todayCases)} cases
       </Text>
       <Text style={styles.deathsText}>
-        + {gf.numberWithCommas(props.deaths)} deaths
+        + {gf.numberWithCommas(props.country.todayDeaths)} deaths
       </Text>
     </View>
   );
