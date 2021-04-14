@@ -1,14 +1,33 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList} from 'react-native';
+import { Image, StyleSheet, Text, View, FlatList} from 'react-native';
 import { SearchBar} from 'react-native-elements';
 
 class CountryList extends React.Component{
   state = {
     search: "",
+    data: data2,
+    fulldata: data2,
   }
 
   updateSearch = (search) => {
     this.setState({search});
+    this.handleSearch(search);
+  };
+
+  handleSearch = (search) => {
+    const formattedSearch = search.toLowerCase();
+    const data = this.state.fulldata.filter(country => {
+      return this.contains(country.country.toLowerCase()
+      , formattedSearch)
+    });
+    this.setState({data: data})
+  }
+
+  contains = (countryName, search) => {
+    if(countryName.includes(search)){
+      return true;
+    }
+    return false;
   };
 
   render (){
@@ -24,15 +43,29 @@ class CountryList extends React.Component{
         />
         <View style = {styles.container}>
           <FlatList
-            data = {data2}
-            renderItem = {({item}) =>(
+            data = {this.state.data}
+            renderItem = {({index, item}) =>(
               <View style={styles.listing}>
+              <View style={styles.listingSubContainer}>
                 <Text style={styles.text}>
-                  {item.country}
+                    {index+1}.
+                  </Text>
+                  <Image
+                  style = {{
+                    height: 25,
+                    width: 25,
+                  }}
+                  source={require("../assets/icons/flag.png")}
+                  />
+                  <Text style={styles.text}>
+                    {item.country}
                 </Text>
+              </View>
+              <View style={styles.listingSubContainer}>
                 <Text style={styles.text}>
                   {item.active}
                 </Text>
+              </View>
               </View>
             )}
             keyExtractor= {item => item.country}
@@ -52,7 +85,7 @@ class CountryList extends React.Component{
         }}
       />
     )
-  }
+  };
 }
 
 const styles = StyleSheet.create({
@@ -61,15 +94,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#202124',
   },
   listing: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderColor: '#ffffff',
+    justifyContent: 'space-between',
+    padding: 15
+  },
+  listingSubContainer: {
+    flexDirection: 'row',
   },
   container:{
     flex: 1,
     backgroundColor: '#202124',
-    alignItems: 'center',
   },
   text: {
-    color: '#00ce7c',
+    color: '#ffffff',
   },
 });
 
