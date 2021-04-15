@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, View, FlatList} from 'react-native';
 import { SearchBar} from 'react-native-elements';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import OverviewPage from './OverviewPage';
+import { useRoute, useNavigation } from '@react-navigation/native';
+
 
 contains = (countryName, search) => {
   if(countryName.includes(search)){
@@ -462,6 +466,9 @@ getImg = (countryName) =>{
 
 const CountryList = (props) => {
 
+  const navigation = useNavigation();
+  const route = useRoute();
+
   const [query, setQuery] = useState("");
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
@@ -487,6 +494,7 @@ const CountryList = (props) => {
 
   return (
     <View style={styles.page}>
+
       <SearchBar
         round
         onChangeText={(text) => updateSearch(text)}
@@ -496,36 +504,50 @@ const CountryList = (props) => {
         placeholder = "Sök land"
         placeholderTextColor = '#999999'
       />
+
       <View>
         {/* dropdownmenu för sortering */}
       </View>
+
       <View style = {styles.container}>
+
         <FlatList
           data = {data}
             renderItem = {({index, item}) =>(
-            <View style={styles.listing}>
-            <View style={styles.listingSubContainer}>
-              <Text style={styles.text}>
-                  {index+1}.
-                </Text>
-                <Image
-                style = {{
-                  height: 25,
-                  width: 25,
-                  borderRadius: 25/2,
-                }}
-                source={getImg(item.country.toLowerCase())}
-                />
-                <Text style={styles.text}>
-                  {item.country}
-              </Text>
-            </View>
-            <View style={styles.listingSubContainer}>
-              <Text style={styles.text}>
-                {item.active}
-              </Text>
-            </View>
-            </View>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("Overview", {country: item})}
+            >
+              <View style={styles.listing}>
+                <View style={styles.listingSubContainer}>
+
+                  <Text style={styles.text}>
+                      {index+1}.
+                  </Text>
+
+                  <Image
+                  style = {{
+                    height: 25,
+                    width: 25,
+                    borderRadius: 25/2,
+                  }}
+                  source={getImg(item.country.toLowerCase())}
+                  />
+
+                  <Text style={styles.text}>
+                    {item.country}
+                  </Text>
+
+                </View>
+
+                <View style={styles.listingSubContainer}>
+
+                  <Text style={styles.text}>
+                  {item.active}
+                  </Text>
+
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
           )}
           keyExtractor= {item => item.country}
         />

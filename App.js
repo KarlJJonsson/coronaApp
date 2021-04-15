@@ -1,6 +1,6 @@
 import React, {useState, useEffect}from "react";
 import { StatusBar, StyleSheet, Image, ActivityIndicator, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useLinkProps } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CountryList from "./components/CountryList";
 import OverviewPage from "./components/OverviewPage";
@@ -45,7 +45,7 @@ const App = () => {
           <Tab.Screen
             name="Overview"
             children={() => 
-              <OverviewPage countries={APIData}/>
+              <OverviewPage country={APIData[0]}/>
             }
             options={{
               tabBarIcon: () => (
