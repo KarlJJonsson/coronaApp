@@ -1,18 +1,30 @@
-import React from "react";
+import React, {useState, useEffect}from "react";
 import { StatusBar, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import CountryList from "./components/CountryList";
-import OverViewPage from "./components/OverviewPage";
-
-global.data = [{id:"1"},{id:"2"},{id:"3"},]
-global.data2;
+import OverviewPage from "./components/OverviewPage";
 
 const Tab = createMaterialTopTabNavigator();
 StatusBar.setBarStyle("light-content", true);
 
-export default function App() {
-  getData();
+const App = () => {
+  const [APIData, setAPIData] = useState([]);
+
+  useEffect(()=>{
+    fetchCountries();
+  }, []);
+
+  const fetchCountries = async () => {
+    try {
+      let response = await fetch("https://coronavirus-19-api.herokuapp.com/countries");
+      let json = await response.json();
+      setAPIData(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -27,7 +39,9 @@ export default function App() {
       >
         <Tab.Screen
           name="Overview"
-          component={OverViewPage}
+          children={() => 
+            <OverviewPage countries={APIData}/>
+          }
           options={{
             tabBarIcon: () => (
               <Image
@@ -39,7 +53,9 @@ export default function App() {
         />
         <Tab.Screen
           name="Countries"
-          component={CountryList}
+          children={() => 
+            <CountryList countries={APIData}/>
+          }
           options={{
             tabBarIcon: () => (
               <Image
@@ -54,25 +70,6 @@ export default function App() {
   );
 }
 
-const fetchCountries = async () => {
-  try {
-    let response = await fetch("https://coronavirus-19-api.herokuapp.com/countries");
-    let json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getData = async () => {
-  fetchCountries().then(
-    (countries) => {
-    data2 = countries;
-    // console.log(data2);
-    }
-  );
-};
-
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: "#202124",
@@ -83,3 +80,5 @@ const styles = StyleSheet.create({
     width: 25,
   },
 });
+
+export default App;

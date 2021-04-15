@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import StatItem from "./StatItem";
 import * as gf from "../GlobalFunctions";
 
 const TotalCard = (props) => {
+
   return (
     <View style={styles.card}>
       <View>
