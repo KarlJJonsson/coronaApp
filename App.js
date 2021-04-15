@@ -10,7 +10,6 @@ StatusBar.setBarStyle("light-content", true);
 
 const App = () => {
   const [APIData, setAPIData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(()=>{
     fetchCountries();
@@ -21,13 +20,12 @@ const App = () => {
       let response = await fetch("https://coronavirus-19-api.herokuapp.com/countries");
       let json = await response.json();
       setAPIData(json);
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (isLoading) {
+  if (APIData.length == 0) {
     return (<View style={styles.loadingScreen}>
       <ActivityIndicator size="large" color="#00ce7c" />
     </View>);
