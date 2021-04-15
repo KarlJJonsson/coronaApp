@@ -490,9 +490,15 @@ const CountryList = (props) => {
       <SearchBar
         round
         onChangeText={(text) => updateSearch(text)}
-        containerStyle ={{backgroundColor: "#202124", borderWidth: 1, borderRadius: 5, round: true}}
+        containerStyle = {{backgroundColor: "#202124", round: true, borderBottomColor: '#202124', borderTopColor: '#202124'}}
+        inputContainerStyle = {{backgroundColor: "#202124", borderWidth: 1, borderColor: '#737373', borderBottomColor: '#737373', borderBottomWidth: 1}}
         value = {query}
+        placeholder = "Sök land"
+        placeholderTextColor = '#999999'
       />
+      <View>
+        {/* dropdownmenu för sortering */}
+      </View>
       <View style = {styles.container}>
         <FlatList
           data = {data}
@@ -506,6 +512,7 @@ const CountryList = (props) => {
                 style = {{
                   height: 25,
                   width: 25,
+                  borderRadius: 25/2,
                 }}
                 source={getImg(item.country.toLowerCase())}
                 />
@@ -533,9 +540,10 @@ const styles = StyleSheet.create({
   },
   listing: {
     flexDirection: 'row',
-    borderColor: '#ffffff',
+    borderColor: '#303136',
     justifyContent: 'space-between',
-    padding: 15
+    padding: 15,
+    borderBottomWidth: 1,
   },
   listingSubContainer: {
     flexDirection: 'row',
@@ -543,9 +551,12 @@ const styles = StyleSheet.create({
   container:{
     flex: 1,
     backgroundColor: '#202124',
+    borderColor: '#303136',
+    borderTopWidth: 1,
   },
   text: {
     color: '#ffffff',
+    padding: 7,
   },
 });
 
