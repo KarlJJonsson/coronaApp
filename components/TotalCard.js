@@ -1,36 +1,53 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { PieChart } from "react-native-chart-kit";
 
 import StatItem from "./StatItem";
 import * as gf from "../GlobalFunctions";
 
 const TotalCard = (props) => {
+  const country = props.country;
+
+  const chartConfig = { color: () => "#fff" };
+  const chartData = [
+    { name: "Active", amount: country.active, color: "#FFA726" },
+    { name: "Recovered", amount: country.recovered, color: "#66BB6A" },
+    { name: "Deaths", amount: country.deaths, color: "#EF5350" },
+  ];
 
   return (
     <View style={styles.card}>
       <View>
         <Text style={styles.headerText}>
-          {gf.numberWithCommas(props.country.cases)}
+          {gf.numberWithCommas(country.cases)}
         </Text>
         <Text style={{ color: "white" }}>Total cases</Text>
       </View>
       <View style={styles.chartSection}>
-        <Text style={styles.defaultText}>CIRCULAR CHART</Text>
+        <PieChart
+          data={chartData}
+          width={200}
+          height={200}
+          chartConfig={chartConfig}
+          accessor={"amount"}
+          center={[30, 0]}
+          hasLegend={false}
+        />
         <View>
           <StatItem
             backgroundColor="#FFA726"
             text="Active"
-            amount={props.country.active}
+            amount={country.active}
           />
           <StatItem
             backgroundColor="#66BB6A"
             text="Recovered"
-            amount={props.country.recovered}
+            amount={country.recovered}
           />
           <StatItem
             backgroundColor="#EF5350"
             text="Deaths"
-            amount={props.country.deaths}
+            amount={country.deaths}
           />
         </View>
       </View>
@@ -55,6 +72,11 @@ const styles = StyleSheet.create({
   chartSection: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  pieChart: {
+    height: 200,
+    backgroundColor: "#fff",
   },
   defaultText: {
     color: "#fff",
