@@ -1,14 +1,18 @@
 import React, {useState, useEffect}from "react";
 import { StatusBar, StyleSheet, Image, ActivityIndicator, View } from "react-native";
-import { NavigationContainer, useLinkProps } from "@react-navigation/native";
+import { NavigationContainer} from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import CountryList from "./components/CountryList";
 import OverviewPage from "./components/OverviewPage";
+import CountryDetailsScreen from "./components/CountryDetailsScreen";
 
+const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
+
 StatusBar.setBarStyle("light-content", true);
 
-const App = () => {
+const TabScreens = () => {
   const [APIData, setAPIData] = useState([]);
 
   useEffect(()=>{
@@ -31,7 +35,6 @@ const App = () => {
     </View>);
   } else {
     return (
-      <NavigationContainer>
         <Tab.Navigator
           tabBarOptions={{
             tabStyle: { height: 100 },
@@ -71,9 +74,29 @@ const App = () => {
             }}
           />
         </Tab.Navigator>
-      </NavigationContainer>
     );
   }
+}
+
+const App = () => {
+  return(
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Overview"
+          children={() => <TabScreens/>}
+        />
+        <Stack.Screen
+          name="Countries"
+          children={() => <TabScreens/>}
+        />
+        <Stack.Screen
+          name="CountryDetails"
+          children={() => <CountryDetailsScreen/>}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({

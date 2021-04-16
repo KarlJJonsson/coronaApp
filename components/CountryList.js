@@ -524,7 +524,7 @@ const CountryList = (props) => {
           data={data}
           renderItem={({ index, item }) => (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("Overview", { country: item })}
+              onPress={() => navigation.navigate("CountryDetails", { country: item })}
             >
               <View style={styles.listing}>
                 <View style={styles.listingSubContainer}>
