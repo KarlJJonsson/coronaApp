@@ -1,22 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { StyleSheet, View } from "react-native";
-import { useRoute } from '@react-navigation/native';
 
 import TotalCard from "./TotalCard";
 import DailyCard from "./DailyCard";
 import Separator from "./Separator";
 
 const OverviewPage = (props) => {
-  const route = useRoute();
-
-  let dataObject = (route.params != undefined) ? route.params.country : props.country;
-
-  const [world, setWorld] = useState(props.country);
-
-  useEffect(() =>{
-    setWorld(dataObject);
-    console.log(world);
-  });
+  const [world] = useState(props.country);
 
   return (
     <View style={styles.container}>

@@ -487,6 +487,8 @@ const CountryList = (props) => {
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
 
+
+  
   useEffect(() => {
     setData(
       props.countries.filter(function (element) {
@@ -557,7 +559,7 @@ const CountryList = (props) => {
           data={data}
           renderItem={({ index, item }) => (
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("Overview", { country: item })}
+              onPress={() => navigation.navigate("CountryDetails", { country: item })}
             >
               <View style={styles.listing}>
                 <View style={styles.listingSubContainer}>
