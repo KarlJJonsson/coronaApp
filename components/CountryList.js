@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, View, FlatList } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import ModalDropdown from "react-native-modal-dropdown";
 
 import * as gf from "../GlobalFunctions";
 
@@ -464,6 +465,20 @@ getImg = (countryName) => {
   }
 };
 
+function getAmount(item, dropdown) {
+  switch (dropdown) {
+    case 0:
+      return item.cases;
+    case 1:
+      return item.recovered;
+    case 2:
+      return item.deaths;
+    case 3:
+      return item.active;
+  }
+  return item.cases;
+}
+
 const CountryList = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -478,7 +493,11 @@ const CountryList = (props) => {
         return element.country != "World";
       })
     );
-    setFullData(props.countries);
+    setFullData(
+      props.countries.filter(function (element) {
+        return element.country != "World";
+      })
+    );
   }, [props]);
 
   updateSearch = (search) => {
@@ -494,6 +513,9 @@ const CountryList = (props) => {
     setData(filteredData);
   };
 
+  const [dropdownValue, updateDropdown] = useState("Cases");
+  const dropdownOptions = ["Cases", "Recovered", "Deaths", "Active"];
+  console.log(dropdownValue);
   return (
     <View style={styles.page}>
       <SearchBar
@@ -517,7 +539,18 @@ const CountryList = (props) => {
         placeholderTextColor="#999999"
       />
 
-      <View>{/* dropdownmenu för sortering */}</View>
+      <View style={styles.dropdown}>
+        <ModalDropdown
+          options={dropdownOptions}
+          textStyle={{ fontSize: 18, color: "#00ce7c" }}
+          dropdownStyle={{ backgroundColor: "#202124" }}
+          defaultValue={"Sorting by Total Cases"}
+          defaultIndex={0}
+          isFullWidth={true}
+          dropdownTextStyle={{ fontSize: 18 }}
+          onSelect={updateDropdown}
+        />
+      </View>
 
       <View style={styles.container}>
         <FlatList
@@ -529,7 +562,6 @@ const CountryList = (props) => {
               <View style={styles.listing}>
                 <View style={styles.listingSubContainer}>
                   <Text style={styles.text}>{index + 1}.</Text>
-
                   <Image
                     style={{
                       height: 25,
@@ -538,13 +570,12 @@ const CountryList = (props) => {
                     }}
                     source={getImg(item.country.toLowerCase())}
                   />
-
                   <Text style={styles.text}>{item.country}</Text>
                 </View>
 
                 <View style={styles.listingSubContainer}>
                   <Text style={styles.text}>
-                    {gf.numberWithCommas(item.cases)}
+                    {gf.numberWithCommas(getAmount(item, dropdownValue))}
                   </Text>
                 </View>
               </View>
@@ -560,6 +591,9 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: "#202124",
+  },
+  dropdown: {
+    padding: 10,
   },
   listing: {
     flexDirection: "row",
