@@ -472,6 +472,8 @@ const CountryList = (props) => {
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
 
+
+  
   useEffect(() => {
     setData(
       props.countries.filter(function (element) {

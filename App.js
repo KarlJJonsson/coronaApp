@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CountryList from "./components/CountryList";
 import OverviewPage from "./components/OverviewPage";
 import CountryDetailsScreen from "./components/CountryDetailsScreen";
+import getImg from "./components/CountryList";
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -83,21 +84,54 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          options={{
+            headerShown:false
+          }}
           name="Overview"
           children={() => <TabScreens/>}
         />
         <Stack.Screen
+          options={{
+            headerShown:false
+          }}
           name="Countries"
           children={() => <TabScreens/>}
         />
         <Stack.Screen
           name="CountryDetails"
           children={() => <CountryDetailsScreen/>}
+          options={
+            ({route}) => ({
+              title: route.params.country.country,
+              headerStyle:{
+                backgroundColor: "#202124"
+              },
+              headerTitleStyle: {
+                color: "#fff"
+              },
+              headerTintColor: '#fff',
+              headerBackTitleVisible: false,
+              headerTitleAlign: "left",
+              // headerBackground: (
+              //   <ImageHeader country={route.params.country.country}/>
+              // ),
+            })
+          }
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+// const ImageHeader = (props) => (
+//   <View style={{ backgroundColor: '#eee' }}>
+//     <Image
+//       style={{height: 25, width: 25, borderRadius: 25/2}}
+//       source={getImg(props.country.toLowerCase())}
+//     />
+//     <Header {...props} style={{ backgroundColor: 'transparent' }}/>
+//   </View>
+// );
 
 const styles = StyleSheet.create({
   loadingScreen: {
