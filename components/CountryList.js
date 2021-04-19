@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, View, FlatList } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
 
 import * as gf from "../GlobalFunctions";
@@ -30,11 +30,12 @@ function getAmount(item, dropdown) {
 
 const CountryList = (props) => {
   const navigation = useNavigation();
-  const route = useRoute();
 
   const [query, setQuery] = useState("");
   const [data, setData] = useState([]);
   const [fullData, setFullData] = useState([]);
+  const [dropdownValue, setDropdown] = useState("Cases");
+  const dropdownOptions = ["Cases", "Recovered", "Deaths", "Active"];
 
   useEffect(() => {
     setData(
@@ -51,19 +52,23 @@ const CountryList = (props) => {
 
   updateSearch = (search) => {
     setQuery(search);
-    handleSearch(search);
+    applyFilterParams(search, dropdownValue);
   };
 
-  handleSearch = (search) => {
+  updateDropdown = (filter) => {
+    setDropdown(filter);
+    applyFilterParams(query, filter);
+  };
+
+  applyFilterParams = (search, filter) => {
     const formattedSearch = search.toLowerCase();
-    const filteredData = fullData.filter((country) => {
+    const searchedData = fullData.filter((country) => {
       return contains(country.country.toLowerCase(), formattedSearch);
     });
+    const filteredData = searchedData.sort(((a, b) => (getAmount(a, filter) > getAmount(b, filter)) ? -1: 1));
     setData(filteredData);
   };
 
-  const [dropdownValue, updateDropdown] = useState("Cases");
-  const dropdownOptions = ["Cases", "Recovered", "Deaths", "Active"];
   console.log(dropdownValue);
   return (
     <View style={styles.page}>
@@ -105,6 +110,7 @@ const CountryList = (props) => {
         <FlatList
           data={data}
           renderItem={({ index, item }) => (
+            //Making entries touchable and sends user to CountryDetailsScreen
             <TouchableWithoutFeedback
               onPress={() =>
                 navigation.navigate("CountryDetails", {
@@ -113,9 +119,12 @@ const CountryList = (props) => {
                 })
               }
             >
+              {/* rendering entry in list */}
               <View style={styles.listing}>
                 <View style={styles.listingSubContainer}>
+                  {/* Adding index */}
                   <Text style={styles.text}>{index + 1}.</Text>
+                  {/* Adding picture of country */}
                   <Image
                     style={{
                       height: 25,
@@ -124,9 +133,8 @@ const CountryList = (props) => {
                     }}
                     source={gf.getImg(item.country.toLowerCase())}
                   />
-                  <Text style={styles.text}>{item.country}</Text>
                 </View>
-
+                {/* Adding statistic to card, formatting statistic*/}
                 <View style={styles.listingSubContainer}>
                   <Text style={styles.text}>
                     {gf.numberWithCommas(getAmount(item, dropdownValue))}
