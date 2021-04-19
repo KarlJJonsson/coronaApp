@@ -3,5 +3,6 @@ from os.path import isfile, join
 onlyfiles = [f for f in listdir("./assets/flags") if isfile(join("./assets/flags", f))]
 result = ""
 for file in onlyfiles:
-    result+= "case '{}':\n  return require('../assets/flags/{}');\n".format(file[:-4], file)
+    name = format(file[:-4])
+    result+= f"case '{name}':\n return require('./assets/flags/{file}');\n"
 print(result)
