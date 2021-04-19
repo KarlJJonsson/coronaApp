@@ -30,15 +30,18 @@ function getAmount(item, dropdown) {
 }
 
 const CountryList = (props) => {
+
   const navigation = useNavigation();
 
   const [query, setQuery] = useState("");
-  const [data, setData] = useState([]);
-  const [unSortedFullData, setUnSortedFullData] = useState([]);
-  const [sortedFullData, setSortedFullData] = useState([]);
+
   const [dropdownValue, setDropdown] = useState("Cases");
   const dropdownOptions = ["Cases", "Recovered", "Deaths", "Active"];
+
   const [sortOrder, setSortOrder] = useState(true);
+
+  const [unSortedFullData, setUnSortedFullData] = useState([]);
+  const [sortedFullData, setSortedFullData] = useState([]);
   const [sortedData, setSortedData] = useState([]);
   const [unSortedData, setUnSortedData] = useState([]);
 
@@ -47,25 +50,25 @@ const CountryList = (props) => {
   }, [props]);
 
   firstSort = () => {
-    const unsortedInitData = props.countries.filter(function (element) {
+    const cutSortedData = props.countries.filter(function (element) {
+      return element.country != "World";
+    });
+    const cutUnsortedData = props.countries.filter(function (element) {
       return element.country != "World";
     });
 
-    const unsortedInitData2 = props.countries.filter(function (element) {
-      return element.country != "World";
-    });
-    const initData = unsortedInitData.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? -1: 1));
-    setSortedData(initData);
-    setSortedFullData(initData);
+    const sortedInitData = cutSortedData.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? -1: 1));
+    setSortedData(sortedInitData);
+    setSortedFullData(sortedInitData);
     
-    const initData2 = unsortedInitData2.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? 1: -1));
-    setUnSortedFullData(initData2);
-    setUnSortedData(initData2);
+    const unsortedInitData = cutUnsortedData.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? 1: -1));
+    setUnSortedFullData(unsortedInitData);
+    setUnSortedData(unsortedInitData);
   }
 
   updateSearch = (search) => {
     setQuery(search);
-    applyFilterParams(search, dropdownValue);
+    applyFilterParams(search);
   }
 
   updateDropdown = (filter) => {
@@ -75,19 +78,19 @@ const CountryList = (props) => {
 
   applyFilterParams = (search) => {
     const formattedSearch = search.toLowerCase();
-    const searchedData1 = sortedFullData.filter((country) => {
+    const searchedSortData = sortedFullData.filter((country) => {
       return contains(country.country.toLowerCase(), formattedSearch);
     });
-    const searchedData2 = unSortedFullData.filter((country) => {
+    const searchedUnsortData = unSortedFullData.filter((country) => {
       return contains(country.country.toLowerCase(), formattedSearch);
     });
-    setSortedData(searchedData1);
-    setUnSortedData(searchedData2);
+    setSortedData(searchedSortData);
+    setUnSortedData(searchedUnsortData);
   }
 
   return (
     <>
-    {sortedData.length != 0 && (
+    {(
       <View style={styles.page}>
         <SearchBar
           round
