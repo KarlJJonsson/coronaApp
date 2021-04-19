@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   chartSection: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   pieChart: {
