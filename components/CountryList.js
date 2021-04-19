@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, Text, View, FlatList } from "react-native";
+import { Image, StyleSheet, Text, View, FlatList, Button } from "react-native";
 import { SearchBar } from "react-native-elements";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
+import { Ionicons } from '@expo/vector-icons';
 
 import * as gf from "../GlobalFunctions";
 
@@ -36,6 +37,7 @@ const CountryList = (props) => {
   const [fullData, setFullData] = useState([]);
   const [dropdownValue, setDropdown] = useState("Cases");
   const dropdownOptions = ["Cases", "Recovered", "Deaths", "Active"];
+  const [sortOrder, setSortOrder] = useState(1);
 
   useEffect(() => {
     setData(
@@ -65,11 +67,10 @@ const CountryList = (props) => {
     const searchedData = fullData.filter((country) => {
       return contains(country.country.toLowerCase(), formattedSearch);
     });
-    const filteredData = searchedData.sort(((a, b) => (getAmount(a, filter) > getAmount(b, filter)) ? -1: 1));
+    const filteredData = searchedData.sort(((a, b) => (getAmount(a, filter) > getAmount(b, filter)) ? sortOrder*-1: sortOrder));
     setData(filteredData);
   };
 
-  console.log(dropdownValue);
   return (
     <View style={styles.page}>
       <SearchBar
@@ -92,7 +93,7 @@ const CountryList = (props) => {
         placeholder="Sök land"
         placeholderTextColor="#999999"
       />
-
+       {/* DropdownMenu */}
       <View style={styles.dropdown}>
         <ModalDropdown
           options={dropdownOptions}
@@ -104,6 +105,18 @@ const CountryList = (props) => {
           dropdownTextStyle={{ fontSize: 18 }}
           onSelect={updateDropdown}
         />
+        <TouchableOpacity onPress={() => {
+          if(sortOrder == 1){
+            setSortOrder(-1);
+          }
+          else{
+            setSortOrder(1);
+          }
+          console.log(sortOrder);
+          applyFilterParams(query, dropdownValue);
+        }}>
+          <Ionicons name="swap-vertical" size={24} color="white" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.container}>
@@ -149,6 +162,7 @@ const CountryList = (props) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   page: {
     flex: 1,
@@ -156,6 +170,8 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   listing: {
     flexDirection: "row",
