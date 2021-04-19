@@ -175,6 +175,7 @@ const CountryList = (props) => {
                       }}
                       source={gf.getImg(item.country.toLowerCase().replace(/\s/g, ''))}
                     />
+                    <Text style={styles.text}>{item.country}</Text>
                   </View>
                   {/* Adding statistic to card, formatting statistic*/}
                   <View style={styles.listingSubContainer}>
