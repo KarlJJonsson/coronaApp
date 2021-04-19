@@ -124,6 +124,12 @@ const CountryList = (props) => {
               isFullWidth={true}
               dropdownTextStyle={{ fontSize: 18 }}
               onSelect={updateDropdown}
+              style={{
+                minWidth: 200
+              }}
+              dropdownStyle={{
+                minWidth: 200
+              }}
             />
           </View>
           <View style={{
