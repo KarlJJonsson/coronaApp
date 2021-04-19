@@ -40,11 +40,7 @@ const CountryList = (props) => {
   const [sortOrder, setSortOrder] = useState(1);
 
   useEffect(() => {
-    setData(
-      props.countries.filter(function (element) {
-        return element.country != "World";
-      })
-    );
+    firstSort();
     setFullData(
       props.countries.filter(function (element) {
         return element.country != "World";
@@ -52,25 +48,43 @@ const CountryList = (props) => {
     );
   }, [props]);
 
+  firstSort = () => {
+    const unsortedInitData = props.countries.filter(function (element) {
+      return element.country != "World";
+    });
+    const initData = unsortedInitData.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? (sortOrder*-1): sortOrder));
+    return setData(initData);
+  }
+
+  inverseSortOrder = () => {
+    if(sortOrder == 1){
+      setSortOrder(-1);
+    }
+    else if(sortOrder == -1){
+      setSortOrder(1);
+    }
+    const filteredData = data.sort(((a, b) => (getAmount(a, dropdownValue) >= getAmount(b, dropdownValue)) ? (sortOrder*-1): sortOrder));
+    setData(filteredData);
+  }
+
   updateSearch = (search) => {
     setQuery(search);
     applyFilterParams(search, dropdownValue);
-  };
+  }
 
   updateDropdown = (filter) => {
     setDropdown(filter);
     applyFilterParams(query, filter);
-  };
+  }
 
   applyFilterParams = (search, filter) => {
     const formattedSearch = search.toLowerCase();
     const searchedData = fullData.filter((country) => {
       return contains(country.country.toLowerCase(), formattedSearch);
     });
-    const filteredData = searchedData.sort(((a, b) => (getAmount(a, filter) > getAmount(b, filter)) ? sortOrder*-1: sortOrder));
+    const filteredData = searchedData.sort(((a, b) => (getAmount(a, filter) >= getAmount(b, filter)) ? (sortOrder*-1): sortOrder));
     setData(filteredData);
-  };
-
+  }
   return (
     <View style={styles.page}>
       <SearchBar
@@ -105,15 +119,9 @@ const CountryList = (props) => {
           dropdownTextStyle={{ fontSize: 18 }}
           onSelect={updateDropdown}
         />
+        {/* SortOrder button */}
         <TouchableOpacity onPress={() => {
-          if(sortOrder == 1){
-            setSortOrder(-1);
-          }
-          else{
-            setSortOrder(1);
-          }
-          console.log(sortOrder);
-          applyFilterParams(query, dropdownValue);
+          inverseSortOrder();
         }}>
           <Ionicons name="swap-vertical" size={24} color="white" />
         </TouchableOpacity>
@@ -144,7 +152,7 @@ const CountryList = (props) => {
                       width: 25,
                       borderRadius: 25 / 2,
                     }}
-                    source={gf.getImg(item.country.toLowerCase())}
+                    source={gf.getImg(item.country.toLowerCase().replace(/\s/g, ''))}
                   />
                 </View>
                 {/* Adding statistic to card, formatting statistic*/}
