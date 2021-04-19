@@ -19,11 +19,11 @@ const Rates = (props) => {
       <View style={styles.row}>
         <Image
           style={styles.flag}
-          source={gf.getImg(props.country.country.toLowerCase())}
+          source={gf.getImg(props.country.country.toLowerCase().replace(/\s/g, ''))}
         />
         <Image
           style={styles.flag}
-          source={gf.getImg(props.world.country.toLowerCase())}
+          source={gf.getImg(props.world.country.toLowerCase().replace(/\s/g, ''))}
         />
       </View>
       <View style={styles.row}>
